@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lessson11</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+
+<body>
+  <h1>TODOアプリ</h1>
+  <div id="app">
+    <label>タスク名</label>
+    <input v-model.string="content">
+    <label>推定時間（分）</label>
+    <input v-model.number="minutes"><br>
+    <button @click="addData">追加</button>
+    <table>
+      <thead>
+        <tr>
+          <theader-component
+            v-for="(header, index) in headers"
+            :key = "index"
+            :title = "header"
+          />
+        </tr>
+      </thead>
+      <tbody>
+        <dsp-component
+        v-for="(todo, index) in todos"
+        :key = "index"
+        :content="todo.content"
+        :minutes="todo.minutes"
+        />
+      </tbody>
+    </table>      
+  </div>
+
+  <script>
+    const headers = ['タスク','推定時間（分）'];
+
+    Vue.component('theader-component', {
+      template: `<th>{{ title }}</th>`,
+      props: {
+        title:{
+            type: String,
+            required: true,
+          },
+        } 
+    })
+
+    Vue.component('dsp-component', {
+      template: `<tr>
+                    <td>{{ content }}</td>
+                    <td>{{ minutes }}</td>
+                 </tr>`,
+      props: {
+        content:{
+            type: String,
+            required: true,
+          },
+        minutes:{
+            type: Number,
+            required: true,
+          }
+        } 
+    })
+
+    const vm = new Vue({
+      el: '#app',
+      data: {
+        content: '',
+        minutes: 0,
+        todos : [],
+        headers: headers,        
+      },
+      methods:{
+        addData(){
+          this.todos.push({'content': this.content, 'minutes': this.minutes});
+          this.content = '' ;
+        }
+      }
+    })
+  </script>
+
+  <style>
+    th{
+      width: 150px;
+      text-align: left;
+    }
+
+    table td{
+      width: 150px;
+      text-align: left;
+    }
+  </style>
+
+</body>
+</html>
